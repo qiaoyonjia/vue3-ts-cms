@@ -12,10 +12,10 @@
 let BASE_URL = ''
 if (import.meta.env.PROD) {
   // 生产环境
-  BASE_URL = 'http://152.136.185.210:4000'
+  BASE_URL = 'http://111.230.245.205:8880'
 } else {
   // 开发环境
-  BASE_URL = 'http://152.136.185.210:5000'
+  BASE_URL = 'http://111.230.245.205:8880'
 }
 
 // console.log(BASE_URL)
