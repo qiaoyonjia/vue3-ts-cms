@@ -50,11 +50,11 @@ const emit = defineEmits(['queryClick', 'resetClick', 'resetStatus'])
 const props = defineProps<IProps>()
 
 // 定义form的数据
-const initialForm: any = []
+const initialForm: any = {}
 for (const item of props.searchConfig.formItems) {
-  initialForm[item.prop] = ''
+  initialForm[item['prop']] = item['initialValue'] ?? ''
 }
-const searchForm = reactive({ initialForm })
+const searchForm = reactive(initialForm)
 
 // 重置操作
 const formRef = ref<InstanceType<typeof ElForm>>()
