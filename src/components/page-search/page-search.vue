@@ -3,30 +3,27 @@
     <!-- 搜索表单 -->
     <el-form label-width="80px" size="large" :model="searchForm" ref="formRef">
       <el-row :gutter="20">
-        <el-col :span="8">
-          <el-form-item label="部门名称" prop="name">
-            <el-input placeholder="请输入部门名称" v-model="searchForm.name" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="部门领导" prop="leader">
-            <el-input
-              placeholder="请输入部门领导"
-              v-model="searchForm.leader"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="创建时间" prop="createAt">
-            <el-date-picker
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始时间"
-              end-placeholder="结束时间"
-              v-model="searchForm.createAt"
-            />
-          </el-form-item>
-        </el-col>
+        <template v-for="item in searchConfig.formItems" :key="item.prop">
+          <el-col :span="8">
+            <el-form-item :label="item.label" :prop="item.prop">
+              <template v-if="item.type === 'input'">
+                <el-input
+                  v-model="searchForm[item.prop]"
+                  :placeholder="item.placeholder"
+                />
+              </template>
+              <template v-if="item.type === 'date-picker'">
+                <el-date-picker
+                  type="daterange"
+                  range-separator="-"
+                  start-placeholder="开始时间"
+                  end-placeholder="结束时间"
+                  v-model="searchForm[item.prop]"
+                />
+              </template>
+            </el-form-item>
+          </el-col>
+        </template>
       </el-row>
     </el-form>
     <!-- 重置和搜索按钮 -->
@@ -43,15 +40,21 @@
 import type { ElForm } from 'element-plus/es/components/index.js'
 import { reactive, ref } from 'vue'
 
-// 定义自定义事件
+// 定义自定义事件/接收的属性
+interface IProps {
+  searchConfig: {
+    formItems: any[]
+  }
+}
 const emit = defineEmits(['queryClick', 'resetClick', 'resetStatus'])
+const props = defineProps<IProps>()
 
 // 定义form的数据
-const searchForm = reactive({
-  name: '',
-  leader: '',
-  createAt: []
-})
+const initialForm: any = []
+for (const item of props.searchConfig.formItems) {
+  initialForm[item.prop] = ''
+}
+const searchForm = reactive({ initialForm })
 
 // 重置操作
 const formRef = ref<InstanceType<typeof ElForm>>()
