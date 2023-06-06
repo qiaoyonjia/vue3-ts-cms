@@ -127,7 +127,7 @@ const handleDeleteBtnClick = async (id) => {
   if (res.code === 1) {
     ElNotification({
       title: '删除成功',
-      message: '删除用户成功',
+      message: '删除成功',
       type: 'success'
     })
   }

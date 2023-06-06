@@ -19,12 +19,17 @@
 import pageSearch from '@/components/page-search/page-search.vue'
 import pageContent from '@/components/page-content/page-content.vue'
 import pageModal from '@/components/page-modal/page-modal.vue'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
 import searchConfig from './config/search.config'
 import contentConfig from './config/content.config'
 import modalConfig from './config/modal.config'
 import userMainStore from '@/store/main/main'
+import usePageContent from '@/hooks/usePageContent'
+import usePageModal from '@/hooks/usePageModal'
+
+// 点击search，content的操作
+const { contentRef, handleQueryClick, handleResetClick } = usePageContent()
 
 const modalConfigRef = computed(() => {
   const mainStore = userMainStore()
@@ -39,24 +44,9 @@ const modalConfigRef = computed(() => {
   return modalConfig
 })
 
+const { modalRef, handleEditClick, handleNewClick } = usePageModal()
+
 // 点击搜索
-const contentRef = ref<InstanceType<typeof pageContent>>()
-const handleQueryClick = (queryInfo: any) => {
-  console.log('contentRef.value', queryInfo)
-  contentRef.value?.fetchPageList(queryInfo)
-}
-const handleResetClick = () => {
-  contentRef.value?.fetchPageList()
-}
-
-const modalRef = ref<InstanceType<typeof pageModal>>()
-const handleNewClick = () => {
-  modalRef.value?.setModalVisible(true)
-}
-
-const handleEditClick = (itemData: any) => {
-  modalRef.value?.setModalVisible(false, itemData)
-}
 </script>
 
 <style scoped>

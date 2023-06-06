@@ -7,7 +7,12 @@
       </el-button>
     </div>
     <div class="table">
-      <el-table :data="pageList" style="width: 100%" border>
+      <el-table
+        :data="pageList"
+        style="width: 100%"
+        border
+        v-bind="contentConfig.childrenTree"
+      >
         <template v-for="item in contentConfig.propsList" :key="item.prop">
           <template v-if="item.type === 'timer'">
             <el-table-column align="center" v-bind="item">
@@ -73,6 +78,7 @@ interface IProps {
       btnTitle?: string
     }
     propsList: any[]
+    childrenTree?: any
   }
 }
 
@@ -117,7 +123,7 @@ const handleDeleteBtnClick = async (id) => {
   if (res.code === 1) {
     ElNotification({
       title: '删除成功',
-      message: '删除用户成功',
+      message: '删除成功',
       type: 'success'
     })
   }

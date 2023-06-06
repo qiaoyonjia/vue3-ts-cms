@@ -28,6 +28,9 @@
                 </template>
               </el-select>
             </template>
+            <template v-if="item.type === 'custom'">
+              <slot :name="item.slotName"></slot>
+            </template>
           </el-form-item>
         </template>
       </el-form>
@@ -58,6 +61,7 @@ interface IProps {
       editTitle: string
     }
     formItems: any[]
+    otherInfo?: any
   }
 }
 
@@ -101,25 +105,31 @@ const setModalVisible = (isNew: boolean, itemData?: any) => {
 // 点击确定
 const handleConfirmClick = async () => {
   dialogVisible.value = false
+
+  let infoData = formData
+  if (props.otherInfo) {
+    infoData = { ...infoData, ...props.otherInfo }
+  }
+
   let res: any = null
   if (isNewRef.value) {
     // 新建
     res = await systemStore.newPageInfoAction(
       props.modalConfig.pageName,
-      formData
+      infoData
     )
   } else {
     // 编辑
     res = await systemStore.editPageInfoAction(
       props.modalConfig.pageName,
       editDate.value.id,
-      formData
+      infoData
     )
   }
   if (res?.code === 1) {
     ElNotification({
       title: '成功',
-      message: '用户操作成功',
+      message: '操作成功',
       type: 'success'
     })
   }

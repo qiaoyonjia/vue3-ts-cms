@@ -117,7 +117,7 @@ const handleConfirmClick = async () => {
   if (res?.code === 1) {
     ElNotification({
       title: '成功',
-      message: '用户操作成功',
+      message: '用户成功',
       type: 'success'
     })
   }
