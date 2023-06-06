@@ -19,7 +19,7 @@
             :size="30"
             src="https://upload.jianshu.io/users/upload_avatars/1102036/c3628b478f06.jpeg"
           />
-          <span class="name">ycj</span>
+          <span class="name">{{ loginStore.userInfo.name }}</span>
         </span>
         <template #dropdown>
           <el-dropdown-menu>
@@ -46,12 +46,15 @@
 import { LOGIN_TOKEN } from '@/global/constants'
 import { localCache } from '@/utils/cache'
 import { useRouter } from 'vue-router'
+import useLoginStore from '@/store/login/login'
 
 const router = useRouter()
 const handleExitClick = () => {
   localCache.removeCache(LOGIN_TOKEN)
   router.push('/login')
 }
+
+const loginStore = useLoginStore()
 </script>
 
 <style lang="less" scoped>

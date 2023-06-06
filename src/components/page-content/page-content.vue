@@ -2,7 +2,7 @@
   <div class="content">
     <div class="header">
       <h3 class="title">{{ contentConfig?.header?.title ?? '数据列表' }}</h3>
-      <el-button type="primary" @click="handleNewUserClick">
+      <el-button type="primary" @click="handleNewUserClick" v-if="isCreate">
         {{ contentConfig?.header?.btnTitle ?? '新建数据' }}
       </el-button>
     </div>
@@ -30,6 +30,7 @@
                   icon="Edit"
                   type="primary"
                   @click="handleEditBtnClick(scope.row)"
+                  v-if="isUpdate"
                   >编辑</el-button
                 >
                 <el-button
@@ -38,6 +39,7 @@
                   icon="Delete"
                   type="danger"
                   @click="handleDeleteBtnClick(scope.row.id)"
+                  v-if="isDelete"
                   >删除</el-button
                 >
               </template>
@@ -69,6 +71,7 @@ import { storeToRefs } from 'pinia'
 import { formatUTC } from '@/utils/format'
 import { ref } from 'vue'
 import { ElNotification } from 'element-plus'
+import usePermission from '@/hooks/usePremissions'
 
 interface IProps {
   contentConfig: {
@@ -84,6 +87,13 @@ interface IProps {
 
 const props = defineProps<IProps>()
 
+// 获取是否有对应的增删改查的权限
+
+const isCreate = usePermission(`${props.contentConfig.pageName}:create`)
+const isDelete = usePermission(`${props.contentConfig.pageName}:delete`)
+const isUpdate = usePermission(`${props.contentConfig.pageName}:update`)
+const isQuery = usePermission(`${props.contentConfig.pageName}:query`)
+
 // 发起action，请求userList数据
 const systemStore = useSystemStore()
 const currentPage = ref(1)
@@ -93,6 +103,7 @@ const emit = defineEmits(['newClick', 'editClick'])
 
 // 用于发送网络请求
 const fetchPageList = (formData: any = {}) => {
+  if (!isQuery) return
   const size = pageSize.value
   const offset = (currentPage.value - 1) * 10
   const pageInfo = { size, offset }

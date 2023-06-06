@@ -10,6 +10,7 @@ import {
   editPageData
 } from '@/service/main/system/system'
 import type { ISystemState } from './type'
+import userMainStore from '../main'
 
 const useSystemStore = defineStore('system', {
   state: (): ISystemState => ({
@@ -66,6 +67,10 @@ const useSystemStore = defineStore('system', {
       // 重新请求
       this.postPageListAction(pageName, { offset: 0, size: 10 })
 
+      // 获取完整的数据
+      const mainStore = userMainStore()
+      mainStore.fetchEntireDataAction()
+
       return deleteResult
     },
 
@@ -74,6 +79,11 @@ const useSystemStore = defineStore('system', {
       const newResult = await newPageData(pageName, pageInfo)
       // 重新请求
       this.postPageListAction(pageName, { offset: 0, size: 10 })
+
+      // 获取完整的数据
+      const mainStore = userMainStore()
+      mainStore.fetchEntireDataAction()
+
       return newResult
     },
     // 修改页面信息
@@ -81,6 +91,11 @@ const useSystemStore = defineStore('system', {
       const editResult = await editPageData(pageName, id, pageInfo)
       // 重新请求
       this.postPageListAction(pageName, { offset: 0, size: 10 })
+
+      // 获取完整的数据
+      const mainStore = userMainStore()
+      mainStore.fetchEntireDataAction()
+
       return editResult
     }
   }
